@@ -8,6 +8,7 @@ import { useSearch } from '../contexts/SearchContext';
 import { hotelsApi } from '../services/hotels';
 import { truncateText } from '../lib/utils';
 import { Link } from 'react-router-dom';
+import { useLocalStorageHotels } from '../utils/localStorageHotels';
 import type { Hotel } from '../types';
 
 const PRICE_RANGES = [
@@ -35,6 +36,7 @@ export const Hotels: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCity, setSelectedCity] = useState('All Cities');
+  const { getHotels, seedDemoHotels } = useLocalStorageHotels();
   
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
   const [selectedStarRatings, setSelectedStarRatings] = useState<number[]>([]);
@@ -46,13 +48,28 @@ export const Hotels: React.FC = () => {
         setLoading(true);
         setError(null);
         
+        // Try to fetch from API first
         const response = await hotelsApi.getAll();
         const hotelData = response?.data || [];
-        setHotels(Array.isArray(hotelData) ? hotelData : []);
+        
+        if (Array.isArray(hotelData) && hotelData.length > 0) {
+          setHotels(hotelData);
+        } else {
+          // Fallback to localStorage demo data
+          let localHotels = getHotels();
+          if (localHotels.length === 0) {
+            localHotels = seedDemoHotels();
+          }
+          setHotels(localHotels);
+        }
       } catch (err) {
         console.error('Error fetching hotels:', err);
-        setError('Failed to load hotels. Please try again.');
-        setHotels([]);
+        // Fallback to localStorage on error
+        let localHotels = getHotels();
+        if (localHotels.length === 0) {
+          localHotels = seedDemoHotels();
+        }
+        setHotels(localHotels);
       } finally {
         setLoading(false);
       }
@@ -64,25 +81,37 @@ export const Hotels: React.FC = () => {
   const filteredHotels = useMemo(() => {
     let result = [...hotels];
     
+    // Helper to get city from hotel (handles both backend and localStorage formats)
+    const getCity = (h: Hotel) => h.location?.city || (h as any).city || '';
+    const getCountry = (h: Hotel) => h.location?.country || (h as any).country || '';
+    const getMinPrice = (h: Hotel) => {
+      if (h.priceRange?.min) return h.priceRange.min;
+      if (h.rooms && h.rooms.length > 0) {
+        return Math.min(...h.rooms.map(r => r.pricePerNight));
+      }
+      return 0;
+    };
+    
     if (filters.location) {
       const searchTerm = filters.location.toLowerCase();
       result = result.filter(h => 
-        h.location?.city?.toLowerCase().includes(searchTerm) ||
+        getCity(h).toLowerCase().includes(searchTerm) ||
         h.name?.toLowerCase().includes(searchTerm) ||
-        h.location?.country?.toLowerCase().includes(searchTerm)
+        getCountry(h).toLowerCase().includes(searchTerm)
       );
     }
     
     if (selectedCity !== 'All Cities') {
-      result = result.filter(h => h.location?.city === selectedCity);
+      result = result.filter(h => getCity(h) === selectedCity);
     }
     
     if (selectedPriceRanges.length > 0) {
       result = result.filter(hotel => {
         return selectedPriceRanges.some(rangeId => {
           const range = PRICE_RANGES.find(r => r.id === rangeId);
-          if (!range || !hotel.priceRange) return false;
-          return hotel.priceRange.min >= range.min && hotel.priceRange.min < range.max;
+          if (!range) return false;
+          const minPrice = getMinPrice(hotel);
+          return minPrice >= range.min && minPrice < range.max;
         });
       });
     }
@@ -378,7 +407,7 @@ export const Hotels: React.FC = () => {
                               </CardTitle>
                               <CardDescription className="flex items-center mt-2 text-base text-gray-400">
                                 <MapPin className="h-4 w-4 mr-2 text-emerald-400" />
-                                {hotel.location?.city || 'Unknown'}, {hotel.location?.country || 'India'}
+                                {(hotel.location?.city || (hotel as any).city || 'Unknown')}, {(hotel.location?.country || (hotel as any).country || 'USA')}
                               </CardDescription>
                             </CardHeader>
                             <div className="flex items-center mb-4">
@@ -408,10 +437,20 @@ export const Hotels: React.FC = () => {
                               </div>
                             )}
                           </div>
-                          <div className="md:text-right mt-6 md:mt-0 md:ml-8">
+                           <div className="md:text-right mt-6 md:mt-0 md:ml-8">
                             <div className="mb-4">
                               <span className="text-3xl font-bold text-emerald-400">
-                                ₹{(hotel.priceRange?.min || 0).toLocaleString('en-IN')}
+                                ₹{(() => {
+                                  // Handle both backend format (priceRange) and localStorage format (rooms array)
+                                  if (hotel.priceRange?.min) {
+                                    return hotel.priceRange.min.toLocaleString('en-IN');
+                                  }
+                                  if (hotel.rooms && hotel.rooms.length > 0) {
+                                    const minPrice = Math.min(...hotel.rooms.map(r => r.pricePerNight));
+                                    return minPrice.toLocaleString('en-IN');
+                                  }
+                                  return '0';
+                                })()}
                               </span>
                               <span className="text-sm ml-1 text-gray-500">/night</span>
                             </div>

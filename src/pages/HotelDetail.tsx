@@ -7,6 +7,7 @@ import { LoadingPage, Alert } from '../components/ui';
 import { hotelsApi } from '../services/hotels';
 import { formatCurrency, calculateNights } from '../lib/utils';
 import { useSearch } from '../contexts/SearchContext';
+import { useLocalStorageHotels } from '../utils/localStorageHotels';
 import type { Hotel, Room } from '../types';
 
 const AMENITY_ICONS: Record<string, React.ElementType> = {
@@ -39,6 +40,8 @@ export const HotelDetail: React.FC = () => {
   const [checkOut, setCheckOut] = useState(filters.checkOut || tomorrow);
   const [guests, setGuests] = useState(filters.guests || { adults: 2, children: 0 });
 
+  const { getHotels } = useLocalStorageHotels();
+
   useEffect(() => {
     const fetchHotelData = async () => {
       if (!id) return;
@@ -47,6 +50,7 @@ export const HotelDetail: React.FC = () => {
         setLoading(true);
         setError(null);
         
+        // Try API first
         const [hotelData, roomsData] = await Promise.all([
           hotelsApi.getById(id).catch(() => null),
           hotelsApi.getRooms(id).catch(() => []),
@@ -56,11 +60,27 @@ export const HotelDetail: React.FC = () => {
           setHotel(hotelData);
           setRooms(Array.isArray(roomsData) ? roomsData : []);
         } else {
-          setError('Hotel not found');
+          // Fallback to localStorage
+          const localHotels = getHotels();
+          const localHotel = localHotels.find((h: Hotel) => h.id === id);
+          if (localHotel) {
+            setHotel(localHotel);
+            setRooms(localHotel.rooms || []);
+          } else {
+            setError('Hotel not found');
+          }
         }
       } catch (err) {
         console.error('Error fetching hotel:', err);
-        setError('Failed to load hotel details. Please try again.');
+        // Fallback to localStorage on error
+        const localHotels = getHotels();
+        const localHotel = localHotels.find((h: Hotel) => h.id === id);
+        if (localHotel) {
+          setHotel(localHotel);
+          setRooms(localHotel.rooms || []);
+        } else {
+          setError('Failed to load hotel details. Please try again.');
+        }
       } finally {
         setLoading(false);
       }
