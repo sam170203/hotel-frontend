@@ -232,14 +232,12 @@ export const AddHotel: React.FC = () => {
       const response = await apiService.post<{ success: boolean; data: { id: string } }>('/hotels', {
         name: formData.name,
         description: formData.description,
-        location: {
-          address: formData.address,
-          city: formData.city,
-          country: formData.country,
-        },
+        address: formData.address,
+        city: formData.city,
+        country: formData.country,
         starRating: formData.starRating,
         amenities: formData.amenities,
-        images: formData.images.length > 0 ? formData.images : ['https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800'],
+        image: formData.images.length > 0 ? formData.images[0] : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800',
       });
 
       if (response.success) {
@@ -439,7 +437,8 @@ export const AddRoom: React.FC = () => {
         description: formData.description,
         type: formData.type,
         pricePerNight: Number(formData.pricePerNight),
-        capacity: formData.capacity,
+        maxAdults: formData.capacity.adults,
+        maxChildren: formData.capacity.children,
         totalRooms: Number(formData.totalRooms),
         bedType: formData.bedType,
         size: formData.size ? Number(formData.size) : undefined,
