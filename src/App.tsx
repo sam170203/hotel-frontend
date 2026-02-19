@@ -19,10 +19,9 @@ const queryClient = new QueryClient({
 });
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode; requireOwner?: boolean }> = ({ 
-  children, 
-  requireOwner = false 
+  children 
 }) => {
-  const { isAuthenticated, isLoading, user } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
     return (
@@ -36,9 +35,8 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; requireOwner?: boole
     return <Navigate to="/login" replace />;
   }
 
-  if (requireOwner && user?.role !== 'owner') {
-    return <Navigate to="/" replace />;
-  }
+  // Temporarily allow any authenticated user to access protected routes
+  // Role check removed for now: if (requireOwner && user?.role !== 'owner')
 
   return <>{children}</>;
 };

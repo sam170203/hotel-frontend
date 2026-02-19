@@ -42,7 +42,7 @@ export const Navbar: React.FC = () => {
     { name: 'Hotels', href: '/hotels' },
   ];
 
-  const isOwner = user?.role === 'owner';
+  // const isOwner = user?.role === 'owner'; // Temporarily disabled
 
   return (
     <nav 
@@ -116,16 +116,14 @@ export const Navbar: React.FC = () => {
                       <Calendar className="h-4 w-4 mr-3" />
                       My Bookings
                     </Link>
-                    {isOwner && (
-                      <Link
-                        to="/owner"
-                        className="flex items-center px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 transition-colors"
-                        onClick={() => setIsUserMenuOpen(false)}
-                      >
-                        <Settings className="h-4 w-4 mr-3" />
-                        Owner Dashboard
-                      </Link>
-                    )}
+                    <Link
+                      to="/owner"
+                      className="flex items-center px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 transition-colors"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      <Settings className="h-4 w-4 mr-3" />
+                      Owner Dashboard
+                    </Link>
                     <button
                       onClick={handleLogout}
                       className="flex items-center w-full px-4 py-3 text-sm text-red-400 hover:text-red-300 transition-colors"
@@ -194,16 +192,14 @@ export const Navbar: React.FC = () => {
                   <Calendar className="h-5 w-5 mr-3" />
                   My Bookings
                 </Link>
-                {isOwner && (
-                  <Link
-                    to="/owner"
-                    className="flex items-center px-4 py-3 text-base font-medium rounded-xl text-gray-300 hover:text-white hover:bg-gray-700/50 transition-all"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <Settings className="h-5 w-5 mr-3" />
-                    Owner Dashboard
-                  </Link>
-                )}
+                <Link
+                  to="/owner"
+                  className="flex items-center px-4 py-3 text-base font-medium rounded-xl text-gray-300 hover:text-white hover:bg-gray-700/50 transition-all"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Settings className="h-5 w-5 mr-3" />
+                  Owner Dashboard
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="flex items-center w-full px-4 py-3 text-base font-medium rounded-xl text-red-400 hover:text-red-300 hover:bg-gray-700/50 transition-all"
