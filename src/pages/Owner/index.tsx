@@ -229,6 +229,17 @@ export const AddHotel: React.FC = () => {
     try {
       setLoading(true);
       
+      console.log('Submitting hotel data:', {
+        name: formData.name,
+        description: formData.description,
+        address: formData.address,
+        city: formData.city,
+        country: formData.country,
+        starRating: formData.starRating,
+        amenities: formData.amenities,
+        image: formData.images.length > 0 ? formData.images[0] : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800',
+      });
+      
       const response = await apiService.post<{ success: boolean; data: { id: string } }>('/hotels', {
         name: formData.name,
         description: formData.description,
@@ -240,12 +251,18 @@ export const AddHotel: React.FC = () => {
         image: formData.images.length > 0 ? formData.images[0] : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800',
       });
 
+      console.log('API Response:', response);
+
       if (response.success) {
+        console.log('Hotel created successfully, navigating to dashboard');
         navigate('/owner');
+      } else {
+        setError('Failed to create hotel. Please try again.');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error adding hotel:', err);
-      setError('Failed to add hotel. Please try again.');
+      const errorMessage = err.response?.data?.error || err.message || 'Failed to add hotel. Please try again.';
+      setError(`Error: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
@@ -432,7 +449,7 @@ export const AddRoom: React.FC = () => {
     try {
       setLoading(true);
       
-      const response = await apiService.post<{ success: boolean }>(`/hotels/${hotelId}/rooms`, {
+      const payload = {
         name: formData.name,
         description: formData.description,
         type: formData.type,
@@ -443,14 +460,24 @@ export const AddRoom: React.FC = () => {
         bedType: formData.bedType,
         size: formData.size ? Number(formData.size) : undefined,
         amenities: formData.amenities,
-      });
+      };
+      
+      console.log('Submitting room data:', payload);
+      
+      const response = await apiService.post<{ success: boolean }>(`/hotels/${hotelId}/rooms`, payload);
+
+      console.log('API Response:', response);
 
       if (response.success) {
+        console.log('Room created successfully, navigating to dashboard');
         navigate('/owner');
+      } else {
+        setError('Failed to create room. Please try again.');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error adding room:', err);
-      setError('Failed to add room. Please try again.');
+      const errorMessage = err.response?.data?.error || err.message || 'Failed to add room. Please try again.';
+      setError(`Error: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
