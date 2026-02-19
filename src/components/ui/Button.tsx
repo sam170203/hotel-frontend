@@ -21,14 +21,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     disabled,
     ...props 
   }, ref) => {
-    const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-300 ease-smooth focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95';
+    const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed';
     
     const variants = {
-      primary: 'bg-primary-600 text-white hover:bg-primary-500 focus:ring-primary-500 shadow-glow hover:shadow-glow-lg border-0',
-      secondary: 'border-2 border-primary-500 text-primary-400 bg-transparent hover:bg-primary-500 hover:text-white focus:ring-primary-500',
-      outline: 'border-2 border-zinc-600 text-gray-300 bg-transparent hover:border-primary-500 hover:text-primary-400 focus:ring-primary-500',
-      ghost: 'text-gray-400 hover:text-primary-400 hover:bg-primary-500/10 focus:ring-primary-500',
-      danger: 'bg-red-600 text-white hover:bg-red-500 focus:ring-red-500 shadow-lg',
+      primary: 'bg-emerald-600 text-white hover:bg-emerald-500 focus:ring-emerald-500 shadow-lg hover:shadow-xl hover:shadow-emerald-500/25',
+      secondary: 'border-2 border-emerald-500 text-emerald-400 bg-transparent hover:bg-emerald-500 hover:text-white hover:shadow-lg hover:shadow-emerald-500/25 focus:ring-emerald-500',
+      outline: 'border-2 border-gray-600 text-gray-300 bg-transparent hover:border-emerald-500 hover:text-emerald-400 focus:ring-emerald-500',
+      ghost: 'text-gray-400 hover:text-emerald-400 hover:bg-emerald-900/30 focus:ring-emerald-500',
+      danger: 'bg-red-600 text-white hover:bg-red-500 focus:ring-red-500 shadow-lg hover:shadow-lg hover:shadow-red-500/25',
     };
 
     const sizes = {

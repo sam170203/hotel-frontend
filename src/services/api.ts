@@ -1,8 +1,6 @@
 import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig } from 'axios';
 
-const API_BASE_URL = import.meta.env.PROD 
-  ? 'https://hotel-booking-backend-8a37.onrender.com/api'
-  : '/api';
+const API_BASE_URL = 'https://hotel-booking-backend-8a37.onrender.com/api';
 
 class ApiService {
   private client: AxiosInstance;
@@ -13,7 +11,7 @@ class ApiService {
       headers: {
         'Content-Type': 'application/json',
       },
-      timeout: 15000,
+      timeout: 30000,
     });
 
     this.client.interceptors.request.use(
@@ -22,23 +20,20 @@ class ApiService {
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
-        console.log('API Request:', config.method?.toUpperCase(), (config.baseURL || '') + (config.url || ''));
         return config;
       },
       (error) => Promise.reject(error)
     );
 
     this.client.interceptors.response.use(
-      (response) => {
-        console.log('API Response:', response.config.url, response.data);
-        return response;
-      },
+      (response) => response,
       (error: AxiosError) => {
-        console.error('API Error:', error.config?.url, error.response?.data || error.message);
         if (error.response?.status === 401) {
           localStorage.removeItem('token');
           localStorage.removeItem('user');
-          window.location.href = '/login';
+          if (!window.location.pathname.includes('/login')) {
+            window.location.href = '/login';
+          }
         }
         return Promise.reject(error);
       }

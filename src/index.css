@@ -15,17 +15,17 @@
   --border-color: #262626;
   --border-light: #404040;
   
-  --accent-50: #f0fdf4;
-  --accent-100: #dcfce7;
-  --accent-200: #bbf7d0;
-  --accent-300: #86efac;
-  --accent-400: #4ade80;
-  --accent-500: #22c55e;
-  --accent-600: #16a34a;
-  --accent-700: #15803d;
-  --accent-800: #166534;
-  --accent-900: #14532d;
-  --accent-950: #052e16;
+  --primary-50: #f0fdf4;
+  --primary-100: #dcfce7;
+  --primary-200: #bbf7d0;
+  --primary-300: #86efac;
+  --primary-400: #4ade80;
+  --primary-500: #22c55e;
+  --primary-600: #16a34a;
+  --primary-700: #15803d;
+  --primary-800: #166534;
+  --primary-900: #14532d;
+  --primary-950: #052e16;
 }
 
 @layer base {
@@ -79,50 +79,43 @@
   input::placeholder, textarea::placeholder {
     color: #737373;
   }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+  }
+
+  select option {
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
 }
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed;
   }
   
   .btn-primary {
-    @apply btn text-white;
-    background-color: #16a34a;
-    box-shadow: 0 4px 14px 0 rgba(34, 197, 94, 0.39);
+    @apply btn text-white bg-emerald-600 hover:bg-emerald-500 focus:ring-emerald-500;
+    box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
   }
 
   .btn-primary:hover {
-    background-color: #22c55e;
-    box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
     transform: translateY(-2px);
   }
 
-  .btn-primary:focus {
-    ring-color: #22c55e;
-  }
-  
   .btn-secondary {
-    @apply btn bg-transparent;
-    border: 2px solid #22c55e;
-    color: #4ade80;
+    @apply btn bg-transparent border-2 border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-white;
   }
 
   .btn-secondary:hover {
-    background-color: #22c55e;
-    color: white;
-    box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
   }
   
   .btn-ghost {
-    @apply btn;
-    color: #a3a3a3;
-    background: transparent;
-  }
-
-  .btn-ghost:hover {
-    color: #4ade80;
-    background-color: rgba(34, 197, 94, 0.1);
+    @apply btn text-gray-400 bg-transparent hover:text-emerald-400 hover:bg-emerald-900/30;
   }
   
   .card {
@@ -132,8 +125,7 @@
   }
 
   .card:hover {
-    transform: translateY(-4px);
-    border-color: #22c55e;
+    border-color: #16a34a;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   }
   
@@ -146,8 +138,8 @@
 
   .input:focus {
     outline: none;
-    border-color: #22c55e;
-    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+    border-color: #16a34a;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
   }
   
   .label {
@@ -182,11 +174,11 @@
   }
 
   .text-shadow-glow {
-    text-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+    text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
   }
 
   .border-glow {
-    box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
   }
 
   .animate-fade-in {
@@ -231,7 +223,7 @@
 }
 
 ::selection {
-  background-color: #22c55e;
+  background-color: #16a34a;
   color: white;
 }
 

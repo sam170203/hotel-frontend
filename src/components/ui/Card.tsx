@@ -48,13 +48,13 @@ export const CardHeader = ({ className, children, ...props }: CardElementProps) 
 );
 
 export const CardTitle = ({ className, children, ...props }: CardElementProps) => (
-  <h3 className={cn('text-lg font-bold', className)} style={{ color: 'var(--text-primary)', ...props.style }} {...props}>
+  <h3 className={cn('text-lg font-bold text-white', className)} {...props}>
     {children}
   </h3>
 );
 
 export const CardDescription = ({ className, children, ...props }: CardElementProps) => (
-  <p className={cn('text-sm mt-1 line-clamp-2', className)} style={{ color: 'var(--text-secondary)', ...props.style }} {...props}>
+  <p className={cn('text-sm mt-1 line-clamp-2 text-gray-400', className)} {...props}>
     {children}
   </p>
 );
@@ -64,7 +64,7 @@ export const CardContent = ({ className, children, ...props }: CardElementProps)
 );
 
 export const CardFooter = ({ className, children, ...props }: CardElementProps) => (
-  <div className={cn('mt-4 pt-4', className)} style={{ borderTop: '1px solid var(--border-color)', ...props.style }} {...props}>
+  <div className={cn('mt-4 pt-4 border-t border-gray-700', className)} {...props}>
     {children}
   </div>
 );

@@ -9,17 +9,17 @@ export default {
     extend: {
       colors: {
         primary: {
-          50: 'var(--primary-50)',
-          100: 'var(--primary-100)',
-          200: 'var(--primary-200)',
-          300: 'var(--primary-300)',
-          400: 'var(--primary-400)',
-          500: 'var(--primary-500)',
-          600: 'var(--primary-600)',
-          700: 'var(--primary-700)',
-          800: 'var(--primary-800)',
-          900: 'var(--primary-900)',
-          950: 'var(--primary-950)',
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#22c55e',
+          600: '#16a34a',
+          700: '#15803d',
+          800: '#166534',
+          900: '#14532d',
+          950: '#052e16',
         },
         dark: {
           900: '#000000',
@@ -75,8 +75,8 @@ export default {
           '50%': { transform: 'translateY(-10px)' },
         },
         glow: {
-          '0%': { boxShadow: '0 0 5px var(--primary-500), 0 0 10px var(--primary-500)' },
-          '100%': { boxShadow: '0 0 20px var(--primary-500), 0 0 30px var(--primary-500)' },
+          '0%': { boxShadow: '0 0 5px rgba(16, 185, 129, 0.5), 0 0 10px rgba(16, 185, 129, 0.5)' },
+          '100%': { boxShadow: '0 0 20px rgba(16, 185, 129, 0.5), 0 0 30px rgba(16, 185, 129, 0.5)' },
         },
       },
       transitionTimingFunction: {
@@ -84,8 +84,8 @@ export default {
         'bounce': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
       },
       boxShadow: {
-        'glow': '0 0 20px rgba(34, 197, 94, 0.5)',
-        'glow-lg': '0 0 40px rgba(34, 197, 94, 0.6)',
+        'glow': '0 0 20px rgba(16, 185, 129, 0.5)',
+        'glow-lg': '0 0 40px rgba(16, 185, 129, 0.6)',
         'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
       },
       backdropBlur: {

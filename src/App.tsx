@@ -6,6 +6,7 @@ import { SearchProvider } from './contexts/SearchContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Layout } from './components/layout/Layout';
 import { Home, Hotels, HotelDetail, Booking, Login, Register, MyBookings } from './pages';
+import { OwnerDashboard, AddHotel, AddRoom } from './pages/Owner';
 import './index.css';
 
 const queryClient = new QueryClient({
@@ -17,20 +18,26 @@ const queryClient = new QueryClient({
   },
 });
 
-// Protected Route Component
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+const ProtectedRoute: React.FC<{ children: React.ReactNode; requireOwner?: boolean }> = ({ 
+  children, 
+  requireOwner = false 
+}) => {
+  const { isAuthenticated, isLoading, user } = useAuth();
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-dark-900">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500" />
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500" />
       </div>
     );
   }
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (requireOwner && user?.role !== 'owner') {
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;
@@ -44,11 +51,10 @@ function App() {
           <SearchProvider>
             <Router>
               <Routes>
-                {/* Public routes without layout */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/signup" element={<Register />} />
 
-                {/* Routes with layout */}
                 <Route
                   path="/"
                   element={
@@ -92,7 +98,37 @@ function App() {
                   }
                 />
 
-                {/* Catch all */}
+                <Route
+                  path="/owner"
+                  element={
+                    <Layout>
+                      <ProtectedRoute requireOwner>
+                        <OwnerDashboard />
+                      </ProtectedRoute>
+                    </Layout>
+                  }
+                />
+                <Route
+                  path="/owner/add-hotel"
+                  element={
+                    <Layout>
+                      <ProtectedRoute requireOwner>
+                        <AddHotel />
+                      </ProtectedRoute>
+                    </Layout>
+                  }
+                />
+                <Route
+                  path="/owner/add-room/:hotelId"
+                  element={
+                    <Layout>
+                      <ProtectedRoute requireOwner>
+                        <AddRoom />
+                      </ProtectedRoute>
+                    </Layout>
+                  }
+                />
+
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </Router>

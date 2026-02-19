@@ -15,7 +15,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ size = 'md', cla
 
   return (
     <svg
-      className={cn('animate-spin text-primary-600', sizes[size], className)}
+      className={cn('animate-spin text-emerald-500', sizes[size], className)}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
@@ -38,10 +38,10 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ size = 'md', cla
 };
 
 export const LoadingPage: React.FC = () => (
-  <div className="min-h-screen flex items-center justify-center bg-gray-50">
+  <div className="min-h-screen flex items-center justify-center bg-gray-900">
     <div className="text-center">
       <LoadingSpinner size="lg" className="mx-auto mb-4" />
-      <p className="text-gray-600">Loading...</p>
+      <p className="text-gray-400">Loading...</p>
     </div>
   </div>
 );
@@ -50,13 +50,13 @@ export const Skeleton: React.FC<{ className?: string; children?: React.ReactNode
   className,
   children 
 }) => (
-  <div className={cn('animate-pulse bg-gray-200 rounded', className)}>
+  <div className={cn('animate-pulse bg-gray-700 rounded', className)}>
     {children}
   </div>
 );
 
 export const SkeletonCard: React.FC = () => (
-  <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6">
+  <div className="bg-gray-800/50 rounded-xl border border-gray-700 overflow-hidden p-6">
     <Skeleton className="h-48 w-full mb-4" />
     <Skeleton className="h-6 w-3/4 mb-2" />
     <Skeleton className="h-4 w-1/2 mb-4" />

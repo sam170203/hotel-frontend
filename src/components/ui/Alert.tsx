@@ -1,6 +1,5 @@
 import React from 'react';
 import { cn } from '../../lib/utils';
-import { Button } from './Button';
 
 interface AlertProps {
   variant?: 'info' | 'success' | 'warning' | 'error';
@@ -19,28 +18,28 @@ export const Alert: React.FC<AlertProps> = ({
 }) => {
   const variants = {
     info: {
-      container: 'bg-blue-50 border-blue-200',
+      container: 'bg-blue-950/80 border-blue-700',
       icon: 'text-blue-400',
-      title: 'text-blue-800',
-      text: 'text-blue-700',
+      title: 'text-blue-300',
+      text: 'text-blue-200',
     },
     success: {
-      container: 'bg-green-50 border-green-200',
-      icon: 'text-green-400',
-      title: 'text-green-800',
-      text: 'text-green-700',
+      container: 'bg-emerald-950/80 border-emerald-700',
+      icon: 'text-emerald-400',
+      title: 'text-emerald-300',
+      text: 'text-emerald-200',
     },
     warning: {
-      container: 'bg-yellow-50 border-yellow-200',
-      icon: 'text-yellow-400',
-      title: 'text-yellow-800',
-      text: 'text-yellow-700',
+      container: 'bg-amber-950/80 border-amber-700',
+      icon: 'text-amber-400',
+      title: 'text-amber-300',
+      text: 'text-amber-200',
     },
     error: {
-      container: 'bg-red-50 border-red-200',
+      container: 'bg-red-950/80 border-red-700',
       icon: 'text-red-400',
-      title: 'text-red-800',
-      text: 'text-red-700',
+      title: 'text-red-300',
+      text: 'text-red-200',
     },
   };
 
@@ -80,17 +79,24 @@ export const Alert: React.FC<AlertProps> = ({
             </h3>
           )}
           <div className={cn('text-sm', variants[variant].text, title && 'mt-2')}>
-            {children}
+            {typeof children === 'string' ? (
+              <span>{children}</span>
+            ) : (
+              children
+            )}
           </div>
         </div>
         {onClose && (
           <div className="ml-auto pl-3">
-            <Button variant="ghost" size="sm" onClick={onClose}>
+            <button 
+              onClick={onClose}
+              className={cn('p-1 rounded hover:bg-white/10 transition-colors', variants[variant].text)}
+            >
               <span className="sr-only">Dismiss</span>
               <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
-            </Button>
+            </button>
           </div>
         )}
       </div>
