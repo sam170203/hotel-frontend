@@ -31,9 +31,8 @@ class ApiService {
         if (error.response?.status === 401) {
           localStorage.removeItem('token');
           localStorage.removeItem('user');
-          if (!window.location.pathname.includes('/login')) {
-            window.location.href = '/login';
-          }
+          // Don't auto-redirect - let the app handle auth per-page
+          // This allows public browsing of hotels
         }
         return Promise.reject(error);
       }
